@@ -2,8 +2,9 @@ package org.app;
 
 import org.app.commands.Command;
 import org.app.commands.Invoker;
-import org.app.commands.Receiver;
 import org.app.commands.concrete.ProgressTracker;
+import org.app.commands.concrete.TrainingSystemInvoker;
+import org.app.commands.concrete.TrainingSystemReceiver;
 import org.app.implementations.Admin;
 import org.app.implementations.Participant;
 import org.app.implementations.TrainingModule;
@@ -11,14 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TrainingSystem {
     private List<TrainingModule> modules;
     private List<Participant> participants;
     private List<Admin> admins;
+    private Invoker invoker;
 
 
     // Constructor
@@ -29,6 +29,8 @@ public class TrainingSystem {
         this.modules = modules;
         this.participants = participants;
         this.admins = admins;
+        Command progressTrackerCommand = new ProgressTracker(new TrainingSystemReceiver(this));
+        this.invoker = new TrainingSystemInvoker(progressTrackerCommand);
     }
 
     // Setters
@@ -91,18 +93,8 @@ public class TrainingSystem {
     }
 
     public void executeCommand(Command command) {
-        command.execute();
+        invoker.setCommand(command);
+        invoker.executeCommand();
     }
-
-//    public static void main(String[] args) {
-//        Receiver receiver = new Receiver();
-//        ProgressTracker command = new ProgressTracker(receiver);
-//        Invoker invoker = new Invoker();
-//
-//        // 1. Set the command
-//        invoker.setCommand(command);
-//
-//        // 2. Execute the command
-//        invoker.executeCommands();
-//    }
+// other attributes
 }

@@ -1,11 +1,10 @@
 package org.app.commands.concrete;
 
 import org.app.commands.Command;
-import org.app.commands.Invoker;
 import org.app.commands.Receiver;
 
 public class ProgressTracker implements Command {
-    private Receiver receiver;
+    private final Receiver receiver;
 
     public ProgressTracker(Receiver receiver) {
         this.receiver = receiver;
@@ -13,6 +12,6 @@ public class ProgressTracker implements Command {
 
     @Override
     public void execute() {
-        receiver.action();
+        receiver.performAction();
     }
 }
